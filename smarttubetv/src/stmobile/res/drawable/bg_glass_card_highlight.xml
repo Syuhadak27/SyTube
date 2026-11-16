@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Liquid Glass Card Top Highlight Reflection (ViewTube Design System)
+  Liquid Glass Card Top Highlight Reflection (SyTube Design System)
   Specular light sheen simulating curved refracted light on the top edge of glass cards.
 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"

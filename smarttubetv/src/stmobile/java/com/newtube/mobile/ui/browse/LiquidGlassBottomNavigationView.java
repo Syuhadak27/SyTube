@@ -19,7 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.newtube.mobile.ui.common.Haptics;
 
 /**
- * Apple Obsidian Black Floating Navigation Dock for ViewTube.
+ * Apple Obsidian Black Floating Navigation Dock for SyTube.
  *
  * <p>Implements a clean, solid Apple-grade dark obsidian navigation dock:
  * <ul>

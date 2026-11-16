@@ -48,7 +48,7 @@
             android:layout_marginStart="16dp"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_viewtube_logo"
+            android:src="@drawable/ic_sytube_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/mobile_title_back"
             app:layout_constraintTop_toTopOf="parent" />

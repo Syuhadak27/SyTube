@@ -57,8 +57,8 @@ public class GDriveBackupManager {
         mSharedPrefs = String.format("%s/%s", mRootDir, SHARED_PREFS_SUBDIR);
         mFilesDir = String.format("%s/%s", mRootDir, FILES_SUBDIR);
         mDataDirs = new String[] { mSharedPrefs, mFilesDir };
-        mBackupDir = String.format("ViewTubeBackup/%s", context.getPackageName());
-        mRootBackupDir = "ViewTubeBackup";
+        mBackupDir = String.format("SyTubeBackup/%s", context.getPackageName());
+        mRootBackupDir = "SyTubeBackup";
         mSignInService = GoogleSignInService.instance();
     }
 

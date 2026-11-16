@@ -1,9 +1,9 @@
-/* viewtube.org. Plain CSS, no build step for styles, nothing loaded from third parties.
+/* sytube.org. Plain CSS, no build step for styles, nothing loaded from third parties.
    Layout: a quiet page. Short sections on a pale ground, generous space, light display type;
    the only images are the app and the film it plays. Follows the system theme. */
 
 @font-face {
-  font-family: "ViewTube Display";
+  font-family: "SyTube Display";
   /* Roboto Flex (SIL OFL), cut to Latin + Spanish, wght 300–600 and the opsz axis. */
   src: url("/assets/fonts/roboto-flex-display.woff2") format("woff2");
   font-weight: 300 600;
@@ -26,7 +26,7 @@
   --device: #101116;
   --shadow: 0 30px 60px -28px rgba(18, 22, 48, 0.35), 0 12px 24px -16px rgba(18, 22, 48, 0.18);
 
-  --display: "ViewTube Display", "Roboto Flex", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "SyTube Display", "Roboto Flex", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
   --text: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, "Roboto Mono", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 

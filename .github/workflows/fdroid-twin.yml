@@ -33,7 +33,7 @@ jobs:
       attestations: write
     env:
       TAG: ${{ inputs.tag }}
-      EXPECTED_CERT: 2ef99d76edfad988ad17cdee8ba18c634e230fe1e3cb1fdc6cdb0249370a36c9
+      EXPECTED_CERT: 7187e42595c00e7e51ca9f05dcf2cc339c759461dd517f47433ec4e8be822c21
       NDK_VERSION: 21.0.6113669
       CMDLINE_TOOLS_VERSION: "23.0"
     steps:
@@ -67,24 +67,10 @@ jobs:
           echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
 
       - name: Configure signing
-        env:
-          KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: |
           set -euo pipefail
-          if [ -z "$KEYSTORE_BASE64" ]; then
-            echo "::error::The release environment has no RELEASE_KEYSTORE_BASE64 secret."
-            exit 1
-          fi
-          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
-          {
-            echo "storeFile=$RUNNER_TEMP/release.jks"
-            echo "storePassword=$KEYSTORE_PASSWORD"
-            echo "keyAlias=$KEY_ALIAS"
-            echo "keyPassword=$KEY_PASSWORD"
-          } > keystore.properties
+          test -f keystore.properties || { echo "::error::keystore.properties missing from repo."; exit 1; }
+          test -f sytube-release.jks || { echo "::error::sytube-release.jks missing from repo."; exit 1; }
 
       - name: Build the F-Droid APK
         run: |
@@ -92,21 +78,19 @@ jobs:
           rm -rf SharedModules/j2v8/src/main/jniLibs MediaServiceCore/SharedModules/j2v8/src/main/jniLibs
           ./gradlew --no-daemon --stacktrace :smarttubetv:assembleStmobileRelease -Pfdroid -PprofgenPath="$PROFGEN"
 
-      - name: Remove the signing key
-        if: always()
-        run: rm -f keystore.properties "$RUNNER_TEMP/release.jks"
+      # Keystore is stored in the repository (as requested) so no cleanup here.
 
       - name: Check name and signature
         run: |
           set -euo pipefail
           mkdir dist
-          cp "smarttubetv/build/outputs/renamed_apks/stmobileRelease/NewTube_${TAG#v}_fdroid_universal.apk" dist/
+          cp "smarttubetv/build/outputs/renamed_apks/stmobileRelease/SyTube_${TAG#v}_fdroid_universal.apk" dist/
           apksigner="$(ls -d "$ANDROID_HOME"/build-tools/[0-9]* | sort -V | tail -1)/apksigner"
           out="$("$apksigner" verify --print-certs dist/*.apk 2>&1)" || { echo "$out"; echo "::error::apksigner rejected the APK."; exit 1; }
           certs="$(printf '%s\n' "$out" | grep -oE 'certificate SHA-256 digest: [0-9a-f]{64}' | awk '{print $4}' | sort -u)"
           if [ "$certs" != "$EXPECTED_CERT" ]; then
             echo "$out"
-            echo "::error::The APK is signed with '${certs}', not NewTube's certificate."
+            echo "::error::The APK is signed with '${certs}', not SyTube's certificate."
             exit 1
           fi
           (cd dist && sha256sum -- *.apk)
@@ -120,7 +104,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: NewTube-fdroid-${{ inputs.tag }}
+          name: SyTube-fdroid-${{ inputs.tag }}
           if-no-files-found: ignore
           path: dist/
           retention-days: 14

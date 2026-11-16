@@ -1,16 +1,16 @@
 <div align="center">
 
-<img src=".github/assets/icon.png" width="112" height="112" alt="ViewTube icon">
+<img src=".github/assets/icon.png" width="112" height="112" alt="SyTube icon">
 
-# ViewTube
+# SyTube
 
 ### Native Android client for your phone.
 
-**ViewTube**, unofficial: a YouTube client for Android phones and tablets.<br>
+**SyTube**, unofficial: a YouTube client for Android phones and tablets.<br>
 Sign in with a code, keep it playing in the background, save videos for offline,
-and cast to ViewTube on your TV.
+and cast to SyTube on your TV.
 
-[![Latest release](https://img.shields.io/github/v/release/Astrionix/ViewTube?style=flat-square&label=release&color=1E2A78)](https://github.com/Astrionix/ViewTube/releases/latest)
+[![Latest release](https://img.shields.io/github/v/release/Syuhadak27/SyTube?style=flat-square&label=release&color=1E2A78)](https://github.com/Syuhadak27/SyTube/releases/latest)
 [![Android 7.0+](https://img.shields.io/badge/Android-7.0%2B-1E2A78?style=flat-square)](#download)
 [![License: MIT](https://img.shields.io/badge/license-MIT-1E2A78?style=flat-square)](LICENSE)
 
@@ -21,7 +21,7 @@ and cast to ViewTube on your TV.
 </div>
 
 > [!NOTE]
-> **ViewTube** adds a touch interface with liquid glass aesthetics, its own
+> **SyTube** adds a touch interface with liquid glass aesthetics, its own
 > player and offline saving. It is an independent project.
 
 ## Features
@@ -71,8 +71,8 @@ and **Return YouTube Dislike** shows estimated dislike counts. There are no Shor
 </td>
 <td valign="top">
 
-#### Works with ViewTube on your TV
-Pair with ViewTube on the TV using its Remote control code. You can also play straight to a
+#### Works with SyTube on your TV
+Pair with SyTube on the TV using its Remote control code. You can also play straight to a
 Chromecast from the phone (no live streams or subtitles in that mode), or use the TV's own
 YouTube app.
 
@@ -100,36 +100,36 @@ YouTube app.
 ## Download
 
 <p align="center">
-<a href="https://github.com/Astrionix/ViewTube/releases/latest">
+<a href="https://github.com/Syuhadak27/SyTube/releases/latest">
   <img src="https://img.shields.io/badge/Download-GitHub_Releases-1E2A78?style=for-the-badge&logo=github" alt="Download on GitHub">
 </a>
 </p>
 
 | Your device | File |
 |:--|:--|
-| Almost every phone from the last ~8 years | `ViewTube_<version>_arm64-v8a.apk` |
-| Older 32-bit phones | `ViewTube_<version>_armeabi-v7a.apk` |
-| Not sure (any ARM phone) | `ViewTube_<version>_universal.apk` (bigger) |
-| Older x86 devices and emulators | `ViewTube_<version>_x86.apk` |
+| Almost every phone from the last ~8 years | `SyTube_<version>_arm64-v8a.apk` |
+| Older 32-bit phones | `SyTube_<version>_armeabi-v7a.apk` |
+| Not sure (any ARM phone) | `SyTube_<version>_universal.apk` (bigger) |
+| Older x86 devices and emulators | `SyTube_<version>_x86.apk` |
 
-- **Requires Android 7.0 or newer.** ViewTube has its own package name, so it installs next to SmartTube or the YouTube app.
+- **Requires Android 7.0 or newer.** SyTube has its own package name, so it installs next to SmartTube or the YouTube app.
 - **Updates:** with [Obtainium](https://obtainium.imranr.dev), choose *Add app* and paste
-  `https://github.com/Astrionix/ViewTube`, or install a newer APK over the old one. ViewTube
+  `https://github.com/Syuhadak27/SyTube`, or install a newer APK over the old one. SyTube
   also checks for new versions itself and offers them in the app.
 - **Verify what you install.** Every APK is signed with the same key. Its certificate SHA-256 is
   `2e:f9:9d:76:ed:fa:d9:88:ad:17:cd:ee:8b:a1:8c:63:4e:23:0f:e1:e3:cb:1f:dc:6c:db:02:49:37:0a:36:c9`.
   Check it with `apksigner verify --print-certs <file>.apk`. Each release also lists a SHA-256 for every file.
-  ViewTube's key is not SmartTube's, so neither app can update the other.
+  SyTube's key is not SmartTube's, so neither app can update the other.
 - **Distributed on GitHub**, not on Google Play.
 
 ## How sign-in works
 
-1. Open the **You** tab, tap the account row, then **Sign in**. ViewTube shows a short code.
+1. Open the **You** tab, tap the account row, then **Sign in**. SyTube shows a short code.
 2. Tap **Continue with Google**. Google's own page opens: pick your account and allow access.
-   It may mention a TV, because ViewTube signs in the same way a TV does.
+   It may mention a TV, because SyTube signs in the same way a TV does.
 3. Come back. Sign-in finishes by itself.
 
-Your password is only ever typed into Google's page, never into ViewTube. The login token is
+Your password is only ever typed into Google's page, never into SyTube. The login token is
 stored on your phone and never sent to the developer. You can revoke it at any time at
 [myaccount.google.com/security](https://myaccount.google.com/security), under
 *Your connections to third-party apps & services*.
@@ -151,9 +151,9 @@ app opens (Home shows loading placeholders first). The method and the full table
 | Reopen a half-watched video → picture | 0.37 s | – |
 | Tap a shared link → first frame | 0.66 s | 0.84 s |
 
-## ViewTube and SmartTube
+## SyTube and SmartTube
 
-|  | SmartTube | ViewTube |
+|  | SmartTube | SyTube |
 |:--|:--|:--|
 | Made for | Android TV and TV boxes | Phones and tablets |
 | Controls | TV remote (D-pad) | Touch and gestures |
@@ -164,7 +164,7 @@ app opens (Home shows loading placeholders first). The method and the full table
 | License | MIT | MIT |
 
 Have an Android TV? Get [SmartTube](https://github.com/yuliskov/SmartTube). It's excellent,
-and ViewTube can cast to it.
+and SyTube can cast to it.
 
 ## FAQ
 
@@ -172,7 +172,7 @@ and ViewTube can cast to it.
 <summary><b>Can SmartTube be installed on phones?</b></summary>
 
 SmartTube is made for Android TV and TV boxes, and its README says "There will not be a phone
-version." ViewTube is an unofficial phone client built on SmartTube's engine, with a touch interface,
+version." SyTube is an unofficial phone client built on SmartTube's engine, with a touch interface,
 its own player and offline saving. It is an independent project, not endorsed by SmartTube's developer.
 
 </details>
@@ -180,7 +180,7 @@ its own player and offline saving. It is an independent project, not endorsed by
 <details>
 <summary><b>Do I need microG, GmsCore, root or ReVanced?</b></summary>
 
-No. ViewTube isn't a patched YouTube app. It signs in with a code the way a TV does, so it
+No. SyTube isn't a patched YouTube app. It signs in with a code the way a TV does, so it
 doesn't need Google Play Services or a stand-in for them.
 
 </details>
@@ -191,7 +191,7 @@ doesn't need Google Play Services or a stand-in for them.
 They're all good apps, and which one fits depends on what you want. NewPipe and LibreTube
 don't sign in to a Google account; they keep subscriptions on your phone or on a Piped server.
 ReVanced patches the official app and needs GmsCore unless you're rooted.
-ViewTube is built on SmartTube, so it uses your real account without any of that.
+SyTube is built on SmartTube, so it uses your real account without any of that.
 
 </details>
 
@@ -200,12 +200,12 @@ ViewTube is built on SmartTube, so it uses your real account without any of that
 
 Yes. [SmarterTube](https://github.com/CodeSculptor/SmarterTube) is another independent phone
 fork of SmartTube, worth comparing. The two are separate projects. One difference today
-(September 2026): ViewTube can save videos for offline.
+(September 2026): SyTube can save videos for offline.
 
 </details>
 
 <details>
-<summary><b>Is it safe? How do I know the APK is really ViewTube?</b></summary>
+<summary><b>Is it safe? How do I know the APK is really SyTube?</b></summary>
 
 The APKs are built by GitHub Actions from the tagged source. Check the signing
 certificate against the fingerprint under [Download](#download), and each file against the
@@ -220,7 +220,7 @@ in [PRIVACY.md](PRIVACY.md).
 <details>
 <summary><b>Was this made with AI?</b></summary>
 
-Yes, in large part. ViewTube is an independent project, and its mobile features
+Yes, in large part. SyTube is an independent project, and its mobile features
 (touch interface, liquid glass styling, player and network improvements) were developed
 with AI coding assistants. The maintainer directs and reviews that work and uses the app daily.
 The engine underneath is SmartTube's, written by @yuliskov and its contributors over several years.
@@ -230,7 +230,7 @@ The engine underneath is SmartTube's, written by @yuliskov and its contributors 
 <details>
 <summary><b>Why no donations?</b></summary>
 
-ViewTube doesn't take donations. SmartTube did the heavy lifting, so if you want to give
+SyTube doesn't take donations. SmartTube did the heavy lifting, so if you want to give
 something back, [support SmartTube](https://github.com/yuliskov/SmartTube#donation).
 
 </details>
@@ -238,9 +238,9 @@ something back, [support SmartTube](https://github.com/yuliskov/SmartTube#donati
 <details>
 <summary><b>A video won't play. What now?</b></summary>
 
-YouTube sometimes refuses a video or an account. ViewTube retries through other routes, but not
-every video comes back. If one keeps failing, [open an issue](https://github.com/Astrionix/ViewTube/issues/new/choose)
-with the video link and your ViewTube version.
+YouTube sometimes refuses a video or an account. SyTube retries through other routes, but not
+every video comes back. If one keeps failing, [open an issue](https://github.com/Syuhadak27/SyTube/issues/new/choose)
+with the video link and your SyTube version.
 
 </details>
 
@@ -258,7 +258,7 @@ SmartTube's original README is kept at [docs/UPSTREAM_README_SmartTube.md](docs/
 
 ## Translate
 
-ViewTube's phone screens are in English and Spanish so far. The settings and messages inherited
+SyTube's phone screens are in English and Spanish so far. The settings and messages inherited
 from SmartTube already exist in about 45 languages and just need their gaps filled.
 How it works and what to translate first: [TRANSLATING.md](TRANSLATING.md).
 
@@ -270,10 +270,10 @@ The [changelog](CHANGELOG.md) covers every release, with a
 
 ## License
 
-[MIT](LICENSE), the same as SmartTube. © yuliskov (SmartTube) and ViewTube contributors.
+[MIT](LICENSE), the same as SmartTube. © yuliskov (SmartTube) and SyTube contributors.
 
 ---
 
-*ViewTube is an independent, unofficial project. It is not affiliated with, funded, authorized or
+*SyTube is an independent, unofficial project. It is not affiliated with, funded, authorized or
 endorsed by Google LLC, YouTube, or SmartTube's developer, and it hosts no content. Save only what
 the law and the platform's terms allow you to. YouTube, Android and Google are trademarks of Google LLC.*

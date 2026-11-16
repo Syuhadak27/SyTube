@@ -1,6 +1,6 @@
-# ViewTube website
+# SyTube website
 
-The site for ViewTube.
+The site for SyTube.
 `.github/workflows/pages.yml` builds this folder and copies the result to the
 [newtube-app/newtube-app.github.io](https://github.com/newtube-app/newtube-app.github.io) repo,
 which GitHub Pages serves, and turns the old address (aleixrodriala.github.io/newtube) into a

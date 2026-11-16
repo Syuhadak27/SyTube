@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
- * Shared Apple Obsidian design foundation helper for ViewTube.
+ * Shared Apple Obsidian design foundation helper for SyTube.
  *
  * <p>Exposes safe styling defaults and background drawables for Apple Obsidian capsule, card,
  * and bottom sheet surfaces. Compatible with Android 7.0+ (API 24+) without external dependencies.</p>

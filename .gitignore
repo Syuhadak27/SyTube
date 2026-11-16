@@ -74,7 +74,7 @@ hs_err_pid*.log
 # UI audit captures (local only, not tracked)
 tools/ui-audit/
 
-# release signing (never commit)
-keystore.properties
-*.jks
+# release signing (included for this repo as requested)
+!keystore.properties
+!sytube-release.jks
 dist/

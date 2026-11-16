@@ -75,9 +75,9 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="6dp"
-                android:src="@drawable/ic_viewtube_logo"
+                android:src="@drawable/ic_sytube_logo"
                 android:scaleType="fitCenter"
-                android:contentDescription="ViewTube" />
+                android:contentDescription="SyTube" />
 
             <LinearLayout
                 android:layout_width="0dp"

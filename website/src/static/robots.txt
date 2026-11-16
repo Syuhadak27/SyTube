@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://viewtube.app/sitemap.xml
+Sitemap: https://sytube.app/sitemap.xml

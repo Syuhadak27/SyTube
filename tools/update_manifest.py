@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write viewtube.json, the manifest the in-app updater reads (Settings -> About -> Check for updates).
+"""Write sytube.json, the manifest the in-app updater reads (Settings -> About -> Check for updates).
 
 Format (SharedModules appupdatechecker2, UpdateManifest): a "package" object with the download
 links, one list per ABI ("downloadUrlList_<Build.SUPPORTED_ABIS[0]>") plus "downloadUrlList" for any
@@ -21,7 +21,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-REPO = "Astrionix/ViewTube"
+REPO = "Syuhadak27/SyTube"
 # x86_64 and anything else get the universal APK (arm64-v8a + armeabi-v7a), the README's "not sure"
 # file: x86_64 devices run it through ARM translation. One without translation had no release APK
 # to install in the first place (the x86 one runs only where 32-bit x86 is also supported).
@@ -107,13 +107,13 @@ def main():
     base = f"https://github.com/{REPO}/releases/download/{args.tag}"
     package = {}
     for abi in ABIS:
-        apk = f"ViewTube_{name}_{abi}.apk"
+        apk = f"SyTube_{name}_{abi}.apk"
         if not (dist / apk).is_file():
             apk = f"NewTube_{name}_{abi}.apk"
         if (dist / apk).is_file():
             package[f"downloadUrlList_{abi}"] = [f"{base}/{apk}"]
             package[f"downloadSize_{abi}"] = (dist / apk).stat().st_size
-    universal = f"ViewTube_{name}_universal.apk"
+    universal = f"SyTube_{name}_universal.apk"
     if not (dist / universal).is_file():
         universal = f"NewTube_{name}_universal.apk"
     if not (dist / universal).is_file():

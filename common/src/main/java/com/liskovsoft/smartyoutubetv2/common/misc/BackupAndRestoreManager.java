@@ -386,7 +386,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         File mediaDir = getExternalStorageDirectory();
         File dataDir = new File(mediaDir, "data");
         if (dataDir.exists()) {
-            File zipFile = new File(mediaDir,  "ViewTubeBackup.zip");
+            File zipFile = new File(mediaDir,  "SyTubeBackup.zip");
             ZipHelper2.zipDirectory(dataDir, zipFile);
         }
     }

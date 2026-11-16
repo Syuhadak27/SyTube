@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="update_urls">
-        <!-- ViewTube OTA update manifests -->
-        <item>https://github.com/Astrionix/ViewTube/releases/latest/download/viewtube.json</item>
-        <item>https://github.com/Astrionix/ViewTube/releases/download/latest/viewtube.json</item>
+        <!-- SyTube OTA update manifests -->
+        <item>https://github.com/Syuhadak27/SyTube/releases/latest/download/sytube.json</item>
+        <item>https://github.com/Syuhadak27/SyTube/releases/download/latest/sytube.json</item>
     </string-array>
 </resources>

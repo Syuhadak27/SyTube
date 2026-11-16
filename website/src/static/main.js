@@ -1,4 +1,4 @@
-/* viewtube.org: small progressive enhancements, no dependencies. Every page works without them.
+/* sytube.org: small progressive enhancements, no dependencies. Every page works without them.
    The release links, sizes and star count are written into the pages at build time (build.py),
    so this file makes no network requests.
    1. The chapter demo: chapters seek the clip and fill as it plays.

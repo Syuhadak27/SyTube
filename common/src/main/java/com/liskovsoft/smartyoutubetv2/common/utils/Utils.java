@@ -122,7 +122,7 @@ public class Utils {
             "yt_service_prefs",
             "global_prefs"
     };
-    private static final String SUPER_PASSWD = "viewtube";
+    private static final String SUPER_PASSWD = "sytube";
     private static final String SUPER_PASSWD_LEGACY = "smarttube";
     private static final int RANDOM_FAIL_REPEAT_TIMES = 10;
     private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver";

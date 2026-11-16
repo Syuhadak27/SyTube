@@ -10,8 +10,8 @@ import androidx.core.content.ContextCompat;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
- * NEWTUBE(you-subscreen): Browse's top bar. On a bottom-nav tab it is the ViewTube logo and red
- * "ViewTube" wordmark; a section opened from a You row (Sports, Playlists, ...) is a sub-screen of
+ * NEWTUBE(you-subscreen): Browse's top bar. On a bottom-nav tab it is the SyTube logo and red
+ * "SyTube" wordmark; a section opened from a You row (Sports, Playlists, ...) is a sub-screen of
  * You, so it gets a back arrow and the section's name - like YouTube's You sub-pages.
  */
 final class BrowseTopBar {
@@ -36,7 +36,7 @@ final class BrowseTopBar {
     }
 
     /**
-     * A tab shows the ViewTube logo and red wordmark; a sub-screen shows the back arrow and
+     * A tab shows the SyTube logo and red wordmark; a sub-screen shows the back arrow and
      * {@code title} (the wordmark text if the section came without one - the arrow is what matters).
      */
     void show(boolean subScreen, CharSequence title) {
