@@ -306,8 +306,8 @@ android {
             applicationId "com.sytube"
             minSdk = 24 // media3 1.10.x floor is 23; 24 = project-wide minimum
             targetSdk = project.ext.targetSdkVersion
-            versionCode 11600
-            versionName "1.16.0"
+            versionCode 11601
+            versionName "1.16.1"
         }
     }
 }

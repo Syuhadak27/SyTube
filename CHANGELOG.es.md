@@ -1,5 +1,11 @@
 # SyTube — Novedades
 
+## 1.16.1 — 2026-11-16
+
+### Cambios
+
+- Actualizaciones y mejoras.
+
 Cambios visibles para el usuario, en español. El historial completo de
 versiones anteriores está en [CHANGELOG.md](CHANGELOG.md) (en inglés).
 
