@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Version B: Nothing OS x Spotify - Matte Black Glass (night same as base). -->
+    <!-- Version B - Dark theme (follows system) -->
     <color name="mobile_color_cast_active">#FFFFFF</color>
     <color name="mobile_color_background">#0B0B0C</color>
     <color name="mobile_color_surface">#141415</color>
@@ -32,14 +32,14 @@
     <color name="dialog_hint_color">#6E6E73</color>
     <color name="dialog_proxy_hint_color">#A1A1A6</color>
 
-    <color name="mobile_glass_surface">#B30B0B0C</color>
+    <color name="mobile_glass_surface">#B30B0B0C</color> <!-- black 70% -->
     <color name="mobile_glass_surface_card">#141415</color>
-    <color name="mobile_glass_surface_control">#0DFFFFFF</color>
+    <color name="mobile_glass_surface_control">#0DFFFFFF</color> <!-- white 5% -->
     <color name="mobile_glass_highlight">#0FFFFFFF</color>
-    <color name="mobile_glass_outline">#14FFFFFF</color>
+    <color name="mobile_glass_outline">#14FFFFFF</color> <!-- white 8% -->
     <color name="mobile_glass_outline_subtle">#0AFFFFFF</color>
     <color name="mobile_glass_divider">#14FFFFFF</color>
-    <color name="mobile_glass_shadow">#66000000</color>
+    <color name="mobile_glass_shadow">#14000000</color>
 
     <color name="mobile_floating_nav_active">#FFFFFF</color>
     <color name="mobile_floating_nav_inactive">#6E6E73</color>

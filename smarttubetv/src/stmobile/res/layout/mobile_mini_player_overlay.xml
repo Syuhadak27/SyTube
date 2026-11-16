@@ -18,10 +18,10 @@
     android:clickable="true"
     android:focusable="true"
     android:visibility="gone"
-    app:cardBackgroundColor="#E0171718"
+    app:cardBackgroundColor="@color/mobile_bg_elevated"
     app:cardCornerRadius="16dp"
     app:cardElevation="8dp"
-    app:strokeColor="#14FFFFFF"
+    app:strokeColor="@color/mobile_glass_outline"
     app:strokeWidth="1dp"
     tools:visibility="visible">
 
