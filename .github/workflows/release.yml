@@ -2,6 +2,9 @@ name: Build & Release
 
 on:
   push:
+    branches:
+      - main
+      - master
     tags:
       - 'v*'
   workflow_dispatch:
@@ -10,11 +13,12 @@ permissions:
   contents: write
 
 concurrency:
-  group: sytube-release-${{ github.ref }}
+  group: sytube-release
   cancel-in-progress: false
 
 jobs:
   build:
+    if: ${{ github.event_name != 'push' || github.actor != 'github-actions[bot]' || startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -23,12 +27,18 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -48,6 +58,91 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Determine and bump version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, re, pathlib, datetime
+
+          gradle_path = pathlib.Path('smarttubetv/build.gradle')
+          text = gradle_path.read_text(encoding='utf-8')
+
+          ref = os.environ.get('GITHUB_REF', '')
+          ref_type = os.environ.get('GITHUB_REF_TYPE', '')
+          bump = True
+          if ref_type == 'tag' and ref.startswith('refs/tags/v'):
+              version = ref.split('/')[-1][1:]
+              bump = False
+          else:
+              m = re.search(r'stmobile\s*\{[\s\S]*?versionCode\s+(\d+)\s+versionName\s+"(\d+)\.(\d+)\.(\d+)"', text)
+              if not m:
+                  raise SystemExit('Cannot find stmobile version in build.gradle')
+              major, minor, patch = int(m.group(2)), int(m.group(3)), int(m.group(4))
+              patch += 1
+              version = f"{major}.{minor}.{patch}"
+              code = major * 10000 + minor * 100 + patch
+
+              def repl(match):
+                  block = match.group(0)
+                  block = re.sub(r'versionCode\s+\d+', f'versionCode {code}', block, count=1)
+                  block = re.sub(r'versionName\s+"[^"]+"', f'versionName "{version}"', block, count=1)
+                  return block
+              text = re.sub(r'(stmobile\s*\{[\s\S]*?\n\s*\})', repl, text, count=1)
+              gradle_path.write_text(text, encoding='utf-8')
+
+              # Ensure changelog has entry for this version
+              cl = pathlib.Path('CHANGELOG.md')
+              cl_text = cl.read_text(encoding='utf-8')
+              if not re.search(r'^## ' + re.escape(version) + r'\b', cl_text, re.M):
+                  today = datetime.date.today().isoformat()
+                  # gather recent commit messages for changelog (best-effort)
+                  import subprocess
+                  msgs = ''
+                  try:
+                      out = subprocess.check_output(['git','log','-5','--pretty=format:- %s'], text=True)
+                      lines = [l for l in out.splitlines() if l.strip() and '[skip ci]' not in l and 'Merge' not in l]
+                      if lines:
+                          msgs = '\n'.join(lines[:5])
+                  except Exception:
+                      pass
+                  if not msgs:
+                      msgs = '- Updates and improvements.'
+                  entry = f"## {version} — {today}\n\n### Changed\n\n{msgs}\n\n"
+                  cl_text = re.sub(r'^(# .*?\n(?:.*?\n)*?\n)', r'\1' + entry, cl_text, count=1)
+                  cl.write_text(cl_text, encoding='utf-8')
+
+              cl_es = pathlib.Path('CHANGELOG.es.md')
+              if cl_es.exists():
+                  es_text = cl_es.read_text(encoding='utf-8')
+                  if not re.search(r'^## ' + re.escape(version) + r'\b', es_text, re.M):
+                      entry_es = f"## {version} — {today}\n\n### Cambios\n\n- Actualizaciones y mejoras.\n\n"
+                      es_text = re.sub(r'^(# .*?\n(?:.*?\n)*?\n)', r'\1' + entry_es, es_text, count=1)
+                      cl_es.write_text(es_text, encoding='utf-8')
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as f:
+              f.write(f"version={version}\n")
+              f.write(f"tag=v{version}\n")
+              f.write(f"bump={'true' if bump else 'false'}\n")
+          print(f"version={version} bump={bump}")
+          PY
+
+      - name: Commit version bump and tag
+        if: steps.version.outputs.bump == 'true'
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add smarttubetv/build.gradle CHANGELOG.md CHANGELOG.es.md || true
+          git commit -m "Release ${TAG} [skip ci]" || echo "No changes to commit"
+          git tag -a "${TAG}" -m "Release ${TAG}" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}" --follow-tags
+
       - name: Build release APKs
         run: |
           set -euo pipefail
@@ -56,35 +151,32 @@ jobs:
           cp smarttubetv/build/outputs/renamed_apks/stmobileRelease/SyTube_*.apk dist/
           ls -l dist
 
-      - name: Determine release name
-        id: meta
+      - name: Generate update manifest
         shell: bash
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
           set -euo pipefail
-          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
-            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
-            echo "name=SyTube ${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
-          else
-            VERSION="$(grep -m1 'versionName' smarttubetv/build.gradle | sed -n 's/.*versionName \"\(.*\)\".*/\1/p' | tail -n1)"
-            VERSION="${VERSION:-dev}"
-            echo "tag=v${VERSION}-build${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
-            echo "name=SyTube ${VERSION} (build ${GITHUB_RUN_NUMBER})" >> "$GITHUB_OUTPUT"
-          fi
+          python3 tools/update_manifest.py --tag "$TAG" --dist dist --out dist/sytube.json
+          cat dist/sytube.json
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SyTube-APKs-${{ github.run_number }}
-          path: dist/*.apk
+          name: SyTube-${{ steps.version.outputs.tag }}
+          path: dist/*
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.meta.outputs.tag }}
-          name: ${{ steps.meta.outputs.name }}
-          files: dist/*.apk
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: SyTube ${{ steps.version.outputs.version }}
+          files: |
+            dist/*.apk
+            dist/sytube.json
           generate_release_notes: true
           draft: false
           prerelease: false
+          make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
