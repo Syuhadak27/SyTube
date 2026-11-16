@@ -14,15 +14,15 @@
     android:layout_height="102dp"
     android:layout_gravity="bottom|end"
     android:layout_marginEnd="12dp"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="88dp"
     android:clickable="true"
     android:focusable="true"
     android:visibility="gone"
-    app:cardBackgroundColor="@color/mobile_glass_surface_card"
-    app:cardCornerRadius="@dimen/mobile_glass_corner_radius_card"
+    app:cardBackgroundColor="#E0171718"
+    app:cardCornerRadius="16dp"
     app:cardElevation="8dp"
-    app:strokeColor="@color/mobile_glass_outline"
-    app:strokeWidth="@dimen/mobile_glass_border_width"
+    app:strokeColor="#14FFFFFF"
+    app:strokeWidth="1dp"
     tools:visibility="visible">
 
     <FrameLayout

@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  Apple Obsidian Black Card Background (SyTube Design System)
-  - Ambient soft depth base
-  - Solid Apple obsidian dark card surface with crisp subtle outline
--->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Ambient depth base -->
-    <item>
-        <shape android:shape="rectangle">
-            <corners android:radius="@dimen/mobile_glass_corner_radius_card" />
-            <solid android:color="@color/mobile_glass_shadow" />
-        </shape>
-    </item>
-
-    <!-- Solid obsidian card body with crisp subtle outline -->
-    <item
-        android:bottom="1dp"
-        android:left="0dp"
-        android:right="0dp"
-        android:top="0dp">
-        <shape android:shape="rectangle">
-            <corners android:radius="@dimen/mobile_glass_corner_radius_card" />
-            <solid android:color="@color/mobile_glass_surface_card" />
-            <stroke
-                android:width="@dimen/mobile_glass_border_width"
-                android:color="@color/mobile_glass_outline" />
-        </shape>
-    </item>
-</layer-list>
+<!-- Feed/settings cards: solid #141415, 1dp border white 8%, radius 16dp (no blur). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#141415" />
+    <stroke android:width="1dp" android:color="#14FFFFFF" />
+    <corners android:radius="16dp" />
+</shape>

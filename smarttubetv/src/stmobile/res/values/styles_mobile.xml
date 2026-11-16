@@ -344,8 +344,8 @@
          theirs side-by-side; the old 10sp-medium choice predates dropping the long
          "Listas de reproducción" label from the bar). -->
     <style name="MobileBottomNavText" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="android:textSize">11sp</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/mobile_bottom_nav_item</item>
     </style>
 
     <!-- Liquid Glass floating bottom-nav text: compact (10sp) so Subscriptions and all tabs fit cleanly without ellipsis -->

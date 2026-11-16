@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  Liquid Glass Card Top Highlight Reflection (SyTube Design System)
-  Specular light sheen simulating curved refracted light on the top edge of glass cards.
--->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <corners
-        android:topLeftRadius="@dimen/mobile_glass_corner_radius_card"
-        android:topRightRadius="@dimen/mobile_glass_corner_radius_card"
-        android:bottomLeftRadius="0dp"
-        android:bottomRightRadius="0dp" />
-    <solid android:color="@android:color/transparent" />
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient android:startColor="#0FFFFFFF" android:endColor="#00FFFFFF" android:angle="270" />
 </shape>
