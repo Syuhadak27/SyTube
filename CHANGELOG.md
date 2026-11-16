@@ -1,5 +1,14 @@
 # SyTube Changelog
 
+## 1.19.2 — 2026-11-16
+
+### Changed
+
+- build: enable all APK signing schemes for release
+- ubah ikon
+- ci: auto-bump and release on every push with update manifest
+- Fix resource references: rename ic_viewtube_logo drawables to ic_sytube_logo
+
 ## 1.19.1 — 2026-11-16
 
 ### Changed
