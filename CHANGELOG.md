@@ -2,6 +2,12 @@
 
 All notable user-facing changes to SyTube, the phone app built on SmartTube.
 
+## 1.19.0 — 2026-11-16
+
+### Changed
+
+- ubah icon
+
 ## 1.16.0 — 2026-11-02
 
 ### Changed
