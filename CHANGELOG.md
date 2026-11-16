@@ -1,5 +1,15 @@
 # SyTube Changelog
 
+## 1.19.1 — 2026-11-16
+
+### Changed
+
+- ubah ikon
+- ci: auto-bump and release on every push with update manifest
+- Fix resource references: rename ic_viewtube_logo drawables to ic_sytube_logo
+- Add missing keystore.properties for signing
+- Simplify workflows: keep release and test-release for SyTube GitHub Actions
+
 All notable user-facing changes to SyTube, the phone app built on SmartTube.
 
 ## 1.19.0 — 2026-11-16
