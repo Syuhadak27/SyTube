@@ -80,16 +80,22 @@ jobs:
               if not m:
                   raise SystemExit('Cannot find stmobile version in build.gradle')
               major, minor, patch = int(m.group(2)), int(m.group(3)), int(m.group(4))
-              patch += 1
-              version = f"{major}.{minor}.{patch}"
-              code = major * 10000 + minor * 100 + patch
+              cur_version = f"{major}.{minor}.{patch}"
+              # Allow explicitly-set release version (e.g. 1.20.0) without auto-bump
+              if cur_version == '1.20.0' and os.environ.get('GITHUB_ACTOR') != 'github-actions[bot]':
+                  version = cur_version
+                  bump = False
+              else:
+                  patch += 1
+                  version = f"{major}.{minor}.{patch}"
+                  code = major * 10000 + minor * 100 + patch
 
-              def repl(match):
-                  block = match.group(0)
-                  block = re.sub(r'versionCode\s+\d+', f'versionCode {code}', block, count=1)
-                  block = re.sub(r'versionName\s+"[^"]+"', f'versionName "{version}"', block, count=1)
-                  return block
-              text = re.sub(r'(stmobile\s*\{[\s\S]*?\n\s*\})', repl, text, count=1)
+                  def repl(match):
+                      block = match.group(0)
+                      block = re.sub(r'versionCode\s+\d+', f'versionCode {code}', block, count=1)
+                      block = re.sub(r'versionName\s+"[^"]+"', f'versionName "{version}"', block, count=1)
+                      return block
+                  text = re.sub(r'(stmobile\s*\{[\s\S]*?\n\s*\})', repl, text, count=1)
               gradle_path.write_text(text, encoding='utf-8')
 
               # Ensure changelog has entry for this version

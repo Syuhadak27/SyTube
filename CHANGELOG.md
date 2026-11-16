@@ -1,5 +1,12 @@
 # SyTube Changelog
 
+## 1.20.0 — 2026-11-16
+
+### Changed
+
+- Reverted UI/theme experiments and restored the stable 1.19.3 app state.
+- Release republished as version 1.20.0.
+
 ## 1.19.3 — 2026-11-16
 
 ### Changed
