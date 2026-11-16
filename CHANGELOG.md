@@ -1,5 +1,13 @@
 # SyTube Changelog
 
+## 1.19.3 — 2026-11-16
+
+### Changed
+
+- Update Android launcher icons from icon12.png
+- build: enable all APK signing schemes for release
+- ubah ikon
+
 ## 1.19.2 — 2026-11-16
 
 ### Changed
