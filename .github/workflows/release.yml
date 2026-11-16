@@ -123,6 +123,7 @@ jobs:
               if cl_es.exists():
                   es_text = cl_es.read_text(encoding='utf-8')
                   if not re.search(r'^## ' + re.escape(version) + r'\b', es_text, re.M):
+                      today = datetime.date.today().isoformat()
                       entry_es = f"## {version} — {today}\n\n### Cambios\n\n- Actualizaciones y mejoras.\n\n"
                       es_text = re.sub(r'^(# .*?\n(?:.*?\n)*?\n)', r'\1' + entry_es, es_text, count=1)
                       cl_es.write_text(es_text, encoding='utf-8')
