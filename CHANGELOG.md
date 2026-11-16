@@ -1,5 +1,13 @@
 # SyTube Changelog
 
+## 1.19.4 — 2026-11-16
+
+### Changed
+
+- ui: apply Version B matte black glass redesign for stmobile
+- Update Android launcher icons from icon12.png
+- build: enable all APK signing schemes for release
+
 ## 1.19.3 — 2026-11-16
 
 ### Changed
