@@ -1,5 +1,13 @@
 # SyTube Changelog
 
+## 1.19.5 — 2026-11-16
+
+### Changed
+
+- ui: follow system theme with adaptive light/dark matte glass
+- ui: apply Version B matte black glass redesign for stmobile
+- Update Android launcher icons from icon12.png
+
 ## 1.19.4 — 2026-11-16
 
 ### Changed

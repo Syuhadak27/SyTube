@@ -1,5 +1,11 @@
 # SyTube — Novedades
 
+## 1.19.5 — 2026-11-16
+
+### Cambios
+
+- Actualizaciones y mejoras.
+
 ## 1.19.4 — 2026-11-16
 
 ### Cambios
