@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 
 import java.util.ArrayList;
@@ -51,11 +52,11 @@ final class AccountSyncManager {
         Account account = MediaServiceManager.instance().getSelectedAccount();
         // Each source degrades to an empty shelf on its own: an account without recommendations
         // (or a transient Home failure) must not prevent history from being synced, and vice versa.
-        Observable<List<Video>> history = MediaServiceManager.instance().getContentService()
+        Observable<List<Video>> history = YouTubeServiceManager.instance().getContentService()
                 .getHistoryObserve()
                 .map(group -> toVideos(group, MediaGroup.TYPE_HISTORY, R.drawable.icon_history))
                 .onErrorResumeNext(Observable.just(Collections.<Video>emptyList()));
-        Observable<List<Video>> recommended = MediaServiceManager.instance().getContentService()
+        Observable<List<Video>> recommended = YouTubeServiceManager.instance().getContentService()
                 .getRecommendedObserve()
                 .map(group -> toVideos(group, MediaGroup.TYPE_RECOMMENDED, R.drawable.icon_home))
                 .onErrorResumeNext(Observable.just(Collections.<Video>emptyList()));
