@@ -5,6 +5,7 @@
 ### Cambios
 
 - Pantalla de sincronización: importa el historial y los vídeos sugeridos de la cuenta conectada y los guarda por cuenta.
+- Los vídeos sugeridos ahora usan el feed Para ti personalizado de la cuenta (`FEwhat_to_watch`), la misma fuente que LePlay, en vez de la primera estantería genérica de Inicio.
 - Acceso en la pestaña Tú y deslizar para actualizar los datos de la cuenta.
 
 ## 1.21.0 — 2026-11-17

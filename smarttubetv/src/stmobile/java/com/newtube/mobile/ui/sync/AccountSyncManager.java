@@ -56,9 +56,7 @@ final class AccountSyncManager {
                 .getHistoryObserve()
                 .map(group -> toVideos(group, MediaGroup.TYPE_HISTORY, R.drawable.icon_history))
                 .onErrorResumeNext(ignored -> Observable.just(Collections.<Video>emptyList()));
-        Observable<List<Video>> recommended = YouTubeServiceManager.instance().getContentService()
-                .getRecommendedObserve()
-                .map(group -> toVideos(group, MediaGroup.TYPE_RECOMMENDED, R.drawable.icon_home))
+        Observable<List<Video>> recommended = Observable.fromCallable(AccountSyncManager::fetchForYou)
                 .onErrorResumeNext(ignored -> Observable.just(Collections.<Video>emptyList()));
 
         return Observable.zip(history, recommended, Result::new)
@@ -69,6 +67,19 @@ final class AccountSyncManager {
                     AccountSyncStore.save(context, account, result.history, result.recommended);
                     callback.onSuccess(result.history.size(), result.recommended.size(), now);
                 }, callback::onError);
+    }
+
+    /**
+     * LePlay-style personalised For You: ask for {@code FEwhat_to_watch} first. The old
+     * ContentService shelf stays as a fallback for accounts where that feed comes back empty.
+     */
+    private static List<Video> fetchForYou() {
+        List<Video> forYou = AccountHomeFeed.fetch();
+        if (!forYou.isEmpty()) {
+            return forYou;
+        }
+        MediaGroup shelf = YouTubeServiceManager.instance().getContentService().getRecommended();
+        return toVideos(shelf, MediaGroup.TYPE_RECOMMENDED, R.drawable.icon_home);
     }
 
     private static List<Video> toVideos(MediaGroup group, int sectionId, int iconRes) {
