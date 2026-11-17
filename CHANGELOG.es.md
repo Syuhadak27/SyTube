@@ -1,5 +1,12 @@
 # SyTube — Novedades
 
+## 1.22.0 — 2026-11-17
+
+### Cambios
+
+- Pantalla de sincronización: importa el historial y los vídeos sugeridos de la cuenta conectada y los guarda por cuenta.
+- Acceso en la pestaña Tú y deslizar para actualizar los datos de la cuenta.
+
 ## 1.21.0 — 2026-11-17
 
 ### Cambios

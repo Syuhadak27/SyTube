@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Sync from account": history and suggested videos pulled from the signed-in account.
+     The two horizontal shelves are the cached snapshot; pull to fetch the account's latest data. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mobile_color_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mobile_title_bar_height"
+        android:background="@color/mobile_color_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/mobile_sync_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/mobile_back"
+            android:padding="12dp"
+            android:src="@drawable/ic_mobile_back_arrow" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/mobile_sync_title"
+            android:textColor="@color/mobile_color_on_surface"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/mobile_sync_progress"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:indeterminateTint="@color/mobile_color_primary"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <com.newtube.mobile.ui.common.HapticSwipeRefreshLayout
+        android:id="@+id/mobile_sync_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_music_hero"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_mobile_sync"
+                        app:tint="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/mobile_sync_title"
+                        android:textColor="@color/mobile_color_on_surface"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/mobile_sync_account"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textColor="@color/mobile_color_on_surface_secondary"
+                        android:textSize="14sp"
+                        tools:text="name@example.com" />
+
+                    <TextView
+                        android:id="@+id/mobile_sync_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/mobile_color_on_surface_secondary"
+                        android:textSize="13sp"
+                        tools:text="Synced 20 history and 12 suggested videos" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/mobile_sync_button"
+                        style="@style/Widget.NewTube.Button.Pill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/mobile_sync_now" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mobile_sync_history_shelf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@+id/mobile_sync_recommended_shelf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </com.newtube.mobile.ui.common.HapticSwipeRefreshLayout>
+
+</LinearLayout>

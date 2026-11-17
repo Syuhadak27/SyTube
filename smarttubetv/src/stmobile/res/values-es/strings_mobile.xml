@@ -451,4 +451,18 @@
     <string name="mobile_nav_shorts">Shorts</string>
     <string name="mobile_nav_create">Crear</string>
     <string name="mobile_create_not_supported">La subida y creación no están disponibles en SyTube</string>
+
+    <!-- Sincronización desde la cuenta -->
+    <string name="mobile_sync_title">Sincronizar desde la cuenta</string>
+    <string name="mobile_sync_now">Sincronizar ahora</string>
+    <string name="mobile_sync_sign_in">Iniciar sesión</string>
+    <string name="mobile_sync_signed_out">Ninguna cuenta seleccionada</string>
+    <string name="mobile_sync_history">Historial de la cuenta</string>
+    <string name="mobile_sync_recommended">Sugerencias para ti</string>
+    <string name="mobile_sync_status">Sincronizados %1$d historiales y %2$d vídeos sugeridos a las %3$s</string>
+    <string name="mobile_sync_waiting">Sincronizando tu cuenta…</string>
+    <string name="mobile_sync_sign_in_message">Inicia sesión para traer tu historial y tus sugerencias desde tu cuenta.</string>
+    <string name="mobile_sync_in_progress">Sincronizando desde tu cuenta…</string>
+    <string name="mobile_sync_error">No se pudo sincronizar. Desliza para volver a intentarlo.</string>
+    <string name="mobile_sync_empty_shelf">Aún no hay nada sincronizado aquí.</string>
 </resources>

@@ -867,6 +867,13 @@ public class MobileBrowseActivity extends MobileActivity
                 .instance(this).startView(com.newtube.mobile.ui.music.MobileMusicActivity.class);
     }
 
+    /** You-panel entry to the account sync screen (history + suggested videos from the account). */
+    private void openAccountSync() {
+        hideYouPanel();
+        com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager
+                .instance(this).startView(com.newtube.mobile.ui.sync.AccountSyncActivity.class);
+    }
+
     // ---------------------------------------------------------------------------------
     // Casting: top-bar entry point (same flow as the player's icon) + connected-state tint.
     //
@@ -1389,6 +1396,10 @@ public class MobileBrowseActivity extends MobileActivity
         for (BrowseSection section : personal) {
             addYouSectionRow(section);
         }
+
+        // Account sync sits with the personal rows: it is the account's own history and
+        // suggestions, pulled from whichever account is signed in.
+        addYouRow(R.drawable.ic_mobile_sync, getString(R.string.mobile_sync_title), this::openAccountSync);
 
         if (!pinned.isEmpty()) {
             addYouGroupLabel(getString(R.string.mobile_you_pinned));

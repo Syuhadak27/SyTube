@@ -240,6 +240,15 @@
             android:screenOrientation="unspecified"
             android:theme="@style/Theme.NewTube" />
 
+        <!-- Account sync: history and suggested videos pulled from the signed-in account. -->
+        <activity
+            android:name="com.newtube.mobile.ui.sync.AccountSyncActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection|keyboardHidden|uiMode"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.NewTube" />
+
         <!--
           Touch Search screen (Wave 4b). Same singleInstance + configChanges pattern as the
           other touch Activities (ViewManager.startActivity() launches with FLAG_ACTIVITY_NEW_TASK;

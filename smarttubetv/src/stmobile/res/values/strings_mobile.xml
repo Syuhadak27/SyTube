@@ -519,4 +519,18 @@
     <string name="mobile_music_error_title">Couldn\'t load music</string>
     <string name="mobile_music_error_message">Check your connection and try again.</string>
     <string name="mobile_music_retry">Try again</string>
+
+    <!-- Account sync: history + suggested videos pulled from the signed-in account -->
+    <string name="mobile_sync_title">Sync from account</string>
+    <string name="mobile_sync_now">Sync now</string>
+    <string name="mobile_sync_sign_in">Sign in</string>
+    <string name="mobile_sync_signed_out">No account selected</string>
+    <string name="mobile_sync_history">History from account</string>
+    <string name="mobile_sync_recommended">Suggested for you</string>
+    <string name="mobile_sync_status">Synced %1$d history and %2$d suggested videos at %3$s</string>
+    <string name="mobile_sync_waiting">Syncing your account…</string>
+    <string name="mobile_sync_sign_in_message">Sign in to pull your watch history and suggestions from your account.</string>
+    <string name="mobile_sync_in_progress">Syncing from your account…</string>
+    <string name="mobile_sync_error">Couldn\'t sync from your account. Pull to try again.</string>
+    <string name="mobile_sync_empty_shelf">Nothing synced here yet.</string>
 </resources>

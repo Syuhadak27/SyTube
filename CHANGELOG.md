@@ -1,5 +1,12 @@
 # SyTube Changelog
 
+## 1.22.0 — 2026-11-17
+
+### Added
+
+- Account sync screen: pulls watch history and suggested videos from the signed-in account and caches them per account.
+- You panel entry point for syncing account data; pull-to-refresh fetches the latest history and suggestions.
+
 ## 1.21.0 — 2026-11-17
 
 ### Added
