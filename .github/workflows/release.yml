@@ -172,3 +172,21 @@ jobs:
           make_latest: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Temporary diagnostics for the first-run environment: the Actions log viewer needs a
+      # signed-in session, so publish the failing Gradle tail to a throwaway branch instead.
+      - name: Publish build failure log
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f gradle-build.log ]; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B ci-logs
+          cp gradle-build.log ci-gradle-build.log
+          git add ci-gradle-build.log
+          git commit -m "ci: gradle failure log for ${GITHUB_SHA} [skip ci]" || true
+          git push -f origin ci-logs
