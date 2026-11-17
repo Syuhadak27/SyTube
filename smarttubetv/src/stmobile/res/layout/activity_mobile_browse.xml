@@ -68,8 +68,20 @@
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/mobile_cast_button"
+            app:layout_constraintEnd_toStartOf="@id/mobile_music_button"
             app:layout_constraintStart_toEndOf="@id/mobile_title_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/mobile_music_button"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/mobile_music_title"
+            android:padding="12dp"
+            android:src="@drawable/ic_mobile_music"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mobile_cast_button"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton

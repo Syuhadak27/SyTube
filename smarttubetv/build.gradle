@@ -19,6 +19,11 @@ import org.gradle.api.tasks.TaskAction
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
+// -PdevBuild: the `dev` branch's parallel install identity. It gets its own applicationId,
+// label, version suffix, APK names and OTA channel so it can sit next to the stable app
+// without ever fighting it for installs or updates.
+def devBuild = project.hasProperty('devBuild')
+
 abstract class CopyRenamedApks extends DefaultTask {
     @InputDirectory
     @PathSensitive(PathSensitivity.RELATIVE)
@@ -172,6 +177,9 @@ android {
         // NEWTUBE(fdroid): -Pfdroid turns the in-app updater off - F-Droid delivers the updates, and
         // its inclusion policy forbids self-updates that aren't an explicit opt-in.
         buildConfigField "boolean", "IN_APP_UPDATES", project.hasProperty('fdroid') ? "false" : "true"
+        buildConfigField "boolean", "DEV_BUILD", devBuild ? "true" : "false"
+        // Launcher label; the stmobile flavor may override it for the dev identity.
+        manifestPlaceholders = [appLabel: devBuild ? "SyTube Dev" : "SyTube"]
 
         // The content of Universal apk
         ndk {
@@ -312,6 +320,15 @@ android {
             targetSdk = project.ext.targetSdkVersion
             versionCode 12000
             versionName "1.20.0"
+            if (devBuild) {
+                // Parallel dev identity: separate install, data and updater channel (see
+                // BuildConfig.DEV_BUILD / AppUpdates), so stable builds are never replaced.
+                applicationId "com.sytube.dev"
+                versionCode project.hasProperty('devVersionCode')
+                        ? project.property('devVersionCode').toInteger() : 200000
+                versionName project.hasProperty('devVersionName')
+                        ? project.property('devVersionName').toString() : "1.20.0-dev"
+            }
         }
     }
 }
@@ -325,7 +342,7 @@ androidComponents {
             builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
             // A -Pfdroid build is a different APK (updater off, Maven J2V8): its files must not
             // overwrite the regular release files when both are built in one checkout.
-            nameTag.set(project.hasProperty('fdroid') ? 'fdroid_' : '')
+            nameTag.set(project.hasProperty('fdroid') ? 'fdroid_' : devBuild ? 'dev_' : '')
         }
         variant.artifacts.use(copyTask).wiredWith { it.input }.toListenTo(SingleArtifact.APK.INSTANCE)
     }

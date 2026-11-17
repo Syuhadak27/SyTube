@@ -28,6 +28,7 @@ import com.liskovsoft.youtubeapi.videoinfo.V2.VideoInfoService;
 import com.newtube.mobile.ui.adddevice.MobileAddDeviceActivity;
 import com.newtube.mobile.ui.browse.MobileBrowseActivity;
 import com.newtube.mobile.ui.channel.MobileChannelActivity;
+import com.newtube.mobile.ui.music.MobileMusicActivity;
 import com.newtube.mobile.ui.channel.MobileChannelUploadsActivity;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -981,6 +982,10 @@ public class MobileMainApplication extends MainApplication {
         // touch MobileSearchActivity, otherwise SearchPresenter.startSearch() / the Home search
         // icon would still launch the Leanback SearchTagsActivity on a touch phone.
         viewManager.register(SearchView.class, MobileSearchActivity.class, MobileBrowseActivity.class);
+
+        // SyTube Music: the dedicated music home (bottom-nav Music tab, top-bar note, You row).
+        // Registered like the other touch screens so MobileActivity.addTop()/Back resolve Home.
+        viewManager.register(MobileMusicActivity.class, MobileMusicActivity.class, MobileBrowseActivity.class);
 
         // Wave 5: touch device-code sign-in screen (ARCHITECTURE.md section 7). Re-point the
         // SignInView mapping (parent = Home, mirroring TV's

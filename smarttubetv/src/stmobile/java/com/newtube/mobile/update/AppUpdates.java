@@ -145,6 +145,12 @@ public final class AppUpdates implements AppUpdateCheckerListener {
             return new String[] {override};
         }
 
+        if (BuildConfig.DEV_BUILD) {
+            // The `dev` channel's own rolling release (prerelease, never "latest"), so a dev
+            // install updates from dev builds and a stable install never sees them.
+            return new String[] {"https://github.com/Syuhadak27/SyTube/releases/download/dev-latest/sytube.json"};
+        }
+
         return context.getResources().getStringArray(R.array.update_urls);
     }
 

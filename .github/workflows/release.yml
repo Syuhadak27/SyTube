@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - master
+      # dev builds a parallel "SyTube Dev" app (applicationId com.sytube.dev) and publishes it
+      # to the rolling prerelease tag `dev-latest`; it never touches the stable release channel.
+      - dev
     tags:
       - 'v*'
   workflow_dispatch:
@@ -13,7 +16,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: sytube-release
+  # Stable and dev build in parallel; each branch has its own release channel.
+  group: sytube-release-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -61,79 +65,7 @@ jobs:
       - name: Determine and bump version
         id: version
         shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import os, re, pathlib, datetime
-
-          gradle_path = pathlib.Path('smarttubetv/build.gradle')
-          text = gradle_path.read_text(encoding='utf-8')
-
-          ref = os.environ.get('GITHUB_REF', '')
-          ref_type = os.environ.get('GITHUB_REF_TYPE', '')
-          bump = True
-          if ref_type == 'tag' and ref.startswith('refs/tags/v'):
-              version = ref.split('/')[-1][1:]
-              bump = False
-          else:
-              m = re.search(r'stmobile\s*\{[\s\S]*?versionCode\s+(\d+)\s+versionName\s+"(\d+)\.(\d+)\.(\d+)"', text)
-              if not m:
-                  raise SystemExit('Cannot find stmobile version in build.gradle')
-              major, minor, patch = int(m.group(2)), int(m.group(3)), int(m.group(4))
-              cur_version = f"{major}.{minor}.{patch}"
-              # Allow explicitly-set release version (e.g. 1.20.0) without auto-bump
-              if cur_version == '1.20.0' and os.environ.get('GITHUB_ACTOR') != 'github-actions[bot]':
-                  version = cur_version
-                  bump = False
-              else:
-                  patch += 1
-                  version = f"{major}.{minor}.{patch}"
-                  code = major * 10000 + minor * 100 + patch
-
-                  def repl(match):
-                      block = match.group(0)
-                      block = re.sub(r'versionCode\s+\d+', f'versionCode {code}', block, count=1)
-                      block = re.sub(r'versionName\s+"[^"]+"', f'versionName "{version}"', block, count=1)
-                      return block
-                  text = re.sub(r'(stmobile\s*\{[\s\S]*?\n\s*\})', repl, text, count=1)
-              gradle_path.write_text(text, encoding='utf-8')
-
-              # Ensure changelog has entry for this version
-              cl = pathlib.Path('CHANGELOG.md')
-              cl_text = cl.read_text(encoding='utf-8')
-              if not re.search(r'^## ' + re.escape(version) + r'\b', cl_text, re.M):
-                  today = datetime.date.today().isoformat()
-                  # gather recent commit messages for changelog (best-effort)
-                  import subprocess
-                  msgs = ''
-                  try:
-                      out = subprocess.check_output(['git','log','-5','--pretty=format:- %s'], text=True)
-                      lines = [l for l in out.splitlines() if l.strip() and '[skip ci]' not in l and 'Merge' not in l]
-                      if lines:
-                          msgs = '\n'.join(lines[:5])
-                  except Exception:
-                      pass
-                  if not msgs:
-                      msgs = '- Updates and improvements.'
-                  entry = f"## {version} — {today}\n\n### Changed\n\n{msgs}\n\n"
-                  cl_text = re.sub(r'^(# .*?\n(?:.*?\n)*?\n)', r'\1' + entry, cl_text, count=1)
-                  cl.write_text(cl_text, encoding='utf-8')
-
-              cl_es = pathlib.Path('CHANGELOG.es.md')
-              if cl_es.exists():
-                  es_text = cl_es.read_text(encoding='utf-8')
-                  if not re.search(r'^## ' + re.escape(version) + r'\b', es_text, re.M):
-                      today = datetime.date.today().isoformat()
-                      entry_es = f"## {version} — {today}\n\n### Cambios\n\n- Actualizaciones y mejoras.\n\n"
-                      es_text = re.sub(r'^(# .*?\n(?:.*?\n)*?\n)', r'\1' + entry_es, es_text, count=1)
-                      cl_es.write_text(es_text, encoding='utf-8')
-
-          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as f:
-              f.write(f"version={version}\n")
-              f.write(f"tag=v{version}\n")
-              f.write(f"bump={'true' if bump else 'false'}\n")
-          print(f"version={version} bump={bump}")
-          PY
+        run: python3 tools/ci_version.py
 
       - name: Commit version bump and tag
         if: steps.version.outputs.bump == 'true'
@@ -151,9 +83,19 @@ jobs:
           git push origin "HEAD:${GITHUB_REF_NAME}" --follow-tags
 
       - name: Build release APKs
+        shell: bash
+        env:
+          IS_DEV: ${{ steps.version.outputs.is_dev }}
+          DEV_VERSION_CODE: ${{ steps.version.outputs.dev_version_code }}
+          DEV_VERSION_NAME: ${{ steps.version.outputs.dev_version_name }}
         run: |
           set -euo pipefail
-          ./gradlew --no-daemon --stacktrace :smarttubetv:assembleStmobileRelease -PprofgenPath="$PROFGEN"
+          EXTRA=""
+          if [ "$IS_DEV" = "true" ]; then
+            EXTRA="-PdevBuild -PdevVersionCode=$DEV_VERSION_CODE -PdevVersionName=$DEV_VERSION_NAME"
+          fi
+          ./gradlew --no-daemon --stacktrace :smarttubetv:assembleStmobileRelease \
+            -PprofgenPath="$PROFGEN" $EXTRA
           mkdir -p dist
           cp smarttubetv/build/outputs/renamed_apks/stmobileRelease/SyTube_*.apk dist/
           ls -l dist
@@ -162,9 +104,16 @@ jobs:
         shell: bash
         env:
           TAG: ${{ steps.version.outputs.tag }}
+          IS_DEV: ${{ steps.version.outputs.is_dev }}
+          DEV_VERSION_CODE: ${{ steps.version.outputs.dev_version_code }}
+          DEV_VERSION_NAME: ${{ steps.version.outputs.dev_version_name }}
         run: |
           set -euo pipefail
-          python3 tools/update_manifest.py --tag "$TAG" --dist dist --out dist/sytube.json
+          if [ "$IS_DEV" = "true" ]; then
+            python3 tools/dev_manifest.py --dist dist --out dist/sytube.json
+          else
+            python3 tools/update_manifest.py --tag "$TAG" --dist dist --out dist/sytube.json
+          fi
           cat dist/sytube.json
 
       - name: Upload APK artifact
@@ -174,6 +123,7 @@ jobs:
           path: dist/*
 
       - name: Create GitHub Release
+        if: steps.version.outputs.is_dev != 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
@@ -185,5 +135,28 @@ jobs:
           draft: false
           prerelease: false
           make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Rolling dev channel: a prerelease that is never "latest", so stable installs never see it.
+      # The dev app points its updater here (BuildConfig.DEV_BUILD) and every run replaces the
+      # assets and bumps the manifest's versionCode.
+      - name: Create dev prerelease
+        if: steps.version.outputs.is_dev == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: dev-latest
+          name: SyTube Dev (latest dev build)
+          body: |
+            Automated build from the `dev` branch.
+
+            Install this once, then the dev app updates itself from this release.
+          files: |
+            dist/*.apk
+            dist/sytube.json
+          generate_release_notes: false
+          draft: false
+          prerelease: true
+          make_latest: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

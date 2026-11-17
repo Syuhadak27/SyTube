@@ -37,6 +37,9 @@ if (osName.contains("mac") || osName.contains("darwin")) {
     protocClassifier = (osArch == "aarch64" || osArch == "arm64") ? "osx-aarch_64" : "osx-x86_64"
 } else if (osName.contains("win")) {
     protocClassifier = "windows-x86_64"
+} else if (osArch == "aarch64" || osArch == "arm64") {
+    // Build hosts like Termux/Asahi Linux are arm64 too; protoc ships a native build for them.
+    protocClassifier = "linux-aarch_64"
 }
 configurations { sabrProtoc }
 dependencies { sabrProtoc "com.google.protobuf:protoc:3.22.3:${protocClassifier}@exe" }
