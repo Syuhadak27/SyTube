@@ -55,11 +55,11 @@ final class AccountSyncManager {
         Observable<List<Video>> history = YouTubeServiceManager.instance().getContentService()
                 .getHistoryObserve()
                 .map(group -> toVideos(group, MediaGroup.TYPE_HISTORY, R.drawable.icon_history))
-                .onErrorResumeNext(Observable.just(Collections.<Video>emptyList()));
+                .onErrorResumeNext(ignored -> Observable.just(Collections.<Video>emptyList()));
         Observable<List<Video>> recommended = YouTubeServiceManager.instance().getContentService()
                 .getRecommendedObserve()
                 .map(group -> toVideos(group, MediaGroup.TYPE_RECOMMENDED, R.drawable.icon_home))
-                .onErrorResumeNext(Observable.just(Collections.<Video>emptyList()));
+                .onErrorResumeNext(ignored -> Observable.just(Collections.<Video>emptyList()));
 
         return Observable.zip(history, recommended, Result::new)
                 .subscribeOn(Schedulers.io())
