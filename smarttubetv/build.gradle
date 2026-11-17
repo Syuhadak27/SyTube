@@ -19,6 +19,15 @@ import org.gradle.api.tasks.TaskAction
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
+// All app identity lives in the root sytube.properties so a branch/folder copy only needs
+// one small file changed. The release workflow updates app.versionCode/app.versionName.
+def appPropsFile = rootProject.file('sytube.properties')
+if (!appPropsFile.exists()) {
+    throw new GradleException("Missing sytube.properties at repository root")
+}
+def appProps = new Properties()
+appPropsFile.withInputStream { appProps.load(it) }
+
 // -PdevBuild: the `dev` branch's parallel install identity. It gets its own applicationId,
 // label, version suffix, APK names and OTA channel so it can sit next to the stable app
 // without ever fighting it for installs or updates.
@@ -162,11 +171,11 @@ android {
     
     defaultConfig {
         // values linked with applicationId: searchable.searchSuggestAuthority, searchable.searchSuggestIntentData, VideoContract.CONTENT_AUTHORITY
-        applicationId "com.sytube"
+        applicationId appProps.getProperty('app.applicationId')
         minSdk = project.ext.minSdkVersion
         targetSdk = project.ext.targetSdkVersion
-        versionCode 2387
-        versionName "31.97"
+        versionCode appProps.getProperty('app.versionCode').trim().toInteger()
+        versionName appProps.getProperty('app.versionName').trim()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // NEWTUBE(fdroid): reproducible builds - with SOURCE_DATE_EPOCH set (F-Droid's build server
         // sets it to the commit time) the stamp is that, not the wall clock, so two builds of one
@@ -178,8 +187,8 @@ android {
         // its inclusion policy forbids self-updates that aren't an explicit opt-in.
         buildConfigField "boolean", "IN_APP_UPDATES", project.hasProperty('fdroid') ? "false" : "true"
         buildConfigField "boolean", "DEV_BUILD", devBuild ? "true" : "false"
-        // Launcher label; the stmobile flavor may override it for the dev identity.
-        manifestPlaceholders = [appLabel: devBuild ? "SyTube Dev" : "SyTube"]
+        // Launcher label; the stmobile flavor overrides it for the dev identity.
+        manifestPlaceholders = [appLabel: appProps.getProperty('app.name')]
 
         // The content of Universal apk
         ndk {
@@ -315,19 +324,19 @@ android {
     // flavor so its source set (src/stmobile/) keeps applying without a directory move.
     productFlavors {
         stmobile {
-            applicationId "com.sytube"
             minSdk = 24 // media3 1.10.x floor is 23; 24 = project-wide minimum
             targetSdk = project.ext.targetSdkVersion
-            versionCode 12000
-            versionName "1.20.0"
             if (devBuild) {
                 // Parallel dev identity: separate install, data and updater channel (see
                 // BuildConfig.DEV_BUILD / AppUpdates), so stable builds are never replaced.
-                applicationId "com.sytube.dev"
+                applicationId appProps.getProperty('dev.applicationId')
                 versionCode project.hasProperty('devVersionCode')
-                        ? project.property('devVersionCode').toInteger() : 200000
+                        ? project.property('devVersionCode').toInteger()
+                        : appProps.getProperty('dev.versionCode').trim().toInteger()
                 versionName project.hasProperty('devVersionName')
-                        ? project.property('devVersionName').toString() : "1.20.0-dev"
+                        ? project.property('devVersionName').toString()
+                        : appProps.getProperty('dev.versionName').trim()
+                manifestPlaceholders = [appLabel: appProps.getProperty('dev.name')]
             }
         }
     }

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Resolve the version/tag for a CI run and (for stable pushes) bump build.gradle + changelog.
+"""Resolve the version/tag for a CI run and (for stable pushes) bump sytube.properties + changelog.
 
 Outputs via $GITHUB_OUTPUT:
     version, tag, bump, is_dev, dev_version_code, dev_version_name
 
 The `dev` branch is a parallel app identity: it never bumps the stable version and always gets a
-fresh versionCode (200000 + run number) so the dev updater offers each new build.
+fresh versionCode (200000 + run number) so the dev updater offers each new build. All app identity
+(package, label, version) lives in the root sytube.properties.
 """
 import datetime
 import os
@@ -14,13 +15,49 @@ import re
 import subprocess
 import sys
 
-GRADLE = pathlib.Path("smarttubetv/build.gradle")
+PROPS = pathlib.Path("sytube.properties")
 CHANGELOG = pathlib.Path("CHANGELOG.md")
 CHANGELOG_ES = pathlib.Path("CHANGELOG.es.md")
 
 
+def read_properties(path):
+    props = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or line.startswith("!"):
+            continue
+        sep = "=" if "=" in line else ":" if ":" in line else None
+        if sep is None:
+            continue
+        key, value = line.split(sep, 1)
+        props[key.strip()] = value.strip()
+    return props
+
+
+def update_properties(path, updates):
+    """Replace existing keys in place and append any new ones, keeping comments/order."""
+    lines = path.read_text(encoding="utf-8").splitlines()
+    seen = set()
+    out = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped and not stripped.startswith(("#", "!")):
+            sep = "=" if "=" in stripped else ":" if ":" in stripped else None
+            if sep is not None:
+                key = stripped.split(sep, 1)[0].strip()
+                if key in updates:
+                    out.append(f"{key}={updates[key]}")
+                    seen.add(key)
+                    continue
+        out.append(line)
+    for key, value in updates.items():
+        if key not in seen:
+            out.append(f"{key}={value}")
+    path.write_text("\n".join(out) + "\n", encoding="utf-8")
+
+
 def main():
-    text = GRADLE.read_text(encoding="utf-8")
+    props = read_properties(PROPS)
     ref = os.environ.get("GITHUB_REF", "")
     ref_type = os.environ.get("GITHUB_REF_TYPE", "")
     ref_name = os.environ.get("GITHUB_REF_NAME", "")
@@ -30,15 +67,16 @@ def main():
     is_dev = ref_name == "dev"
     bump = True
 
-    m = re.search(
-        r'stmobile\s*\{[\s\S]*?versionCode\s+(\d+)\s+versionName\s+"(\d+)\.(\d+)\.(\d+)"',
-        text,
-    )
-    if not m:
-        sys.exit("Cannot find stmobile version in build.gradle")
+    try:
+        cur_version = props["app.versionName"]
+    except KeyError:
+        sys.exit("Missing app.versionName in sytube.properties")
 
-    major, minor, patch = int(m.group(2)), int(m.group(3)), int(m.group(4))
-    cur_version = f"{major}.{minor}.{patch}"
+    m = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", cur_version)
+    if not m:
+        sys.exit(f"app.versionName must be MAJOR.MINOR.PATCH, got {cur_version!r}")
+
+    major, minor, patch = int(m.group(1)), int(m.group(2)), int(m.group(3))
 
     if ref_type == "tag" and ref.startswith("refs/tags/v"):
         version = ref.split("/")[-1][1:]
@@ -54,21 +92,10 @@ def main():
         patch += 1
         version = f"{major}.{minor}.{patch}"
         code = major * 10000 + minor * 100 + patch
-
-        pattern = re.compile(
-            r'(stmobile\s*\{[\s\S]*?)versionCode\s+(\d+)(\s+versionName\s+")([^"]+)(")'
+        update_properties(
+            PROPS,
+            {"app.versionCode": code, "app.versionName": version},
         )
-
-        def repl(m):
-            return (
-                m.group(1)
-                + f"versionCode {code}"
-                + m.group(3)
-                + version
-                + m.group(5)
-            )
-
-        GRADLE.write_text(pattern.sub(repl, text, count=1), encoding="utf-8")
         write_changelog(version)
 
     dev_version_code = 200000 + run_number
@@ -111,7 +138,7 @@ def write_changelog(version):
 
     entry = f"## {version} — {today}\n\n### Changed\n\n{msgs}\n\n"
     CHANGELOG.write_text(
-        re.sub(r"^(# .*?\n(?:.*?\n)*?\n)", r"\1" + entry, text, count=1),
+        re.sub(r"^(# .*?\n\n)", lambda m: m.group(1) + entry, text, count=1),
         encoding="utf-8",
     )
 
@@ -120,7 +147,7 @@ def write_changelog(version):
         if not re.search(r"^## " + re.escape(version) + r"\b", es, re.M):
             entry_es = f"## {version} — {today}\n\n### Cambios\n\n- Actualizaciones y mejoras.\n\n"
             CHANGELOG_ES.write_text(
-                re.sub(r"^(# .*?\n(?:.*?\n)*?\n)", r"\1" + entry_es, es, count=1),
+                re.sub(r"^(# .*?\n\n)", lambda m: m.group(1) + entry_es, es, count=1),
                 encoding="utf-8",
             )
 

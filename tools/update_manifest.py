@@ -97,11 +97,20 @@ def main():
     if newest != name:
         sys.exit(f"CHANGELOG.md starts at {newest}, not {name}")
 
-    gradle = (ROOT / "smarttubetv" / "build.gradle").read_text(encoding="utf-8")
-    # The stmobile flavor's pair (defaultConfig still carries upstream's 2387 / "31.97").
-    code = re.search(r'versionCode\s+(\d+)\s+versionName\s+"' + re.escape(name) + '"', gradle)
-    if not code or int(code.group(1)) != version_code(name):
-        sys.exit(f"build.gradle has no versionCode {version_code(name)} for versionName {name}")
+    props = {}
+    for line in (ROOT / "sytube.properties").read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith(("#", "!")):
+            continue
+        sep = "=" if "=" in line else ":" if ":" in line else None
+        if sep is not None:
+            key, value = line.split(sep, 1)
+            props[key.strip()] = value.strip()
+
+    if props.get("app.versionName") != name:
+        sys.exit(f"sytube.properties has versionName {props.get('app.versionName')!r}, not {name!r}")
+    if int(props.get("app.versionCode", "0")) != version_code(name):
+        sys.exit(f"sytube.properties has no versionCode {version_code(name)} for versionName {name}")
 
     dist = pathlib.Path(args.dist)
     base = f"https://github.com/{REPO}/releases/download/{args.tag}"
