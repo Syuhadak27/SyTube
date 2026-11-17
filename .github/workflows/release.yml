@@ -94,8 +94,20 @@ jobs:
           if [ "$IS_DEV" = "true" ]; then
             EXTRA="-PdevBuild -PdevVersionCode=$DEV_VERSION_CODE -PdevVersionName=$DEV_VERSION_NAME"
           fi
+          set +e
           ./gradlew --no-daemon --stacktrace :smarttubetv:assembleStmobileRelease \
-            -PprofgenPath="$PROFGEN" $EXTRA
+            -PprofgenPath="$PROFGEN" $EXTRA 2>&1 | tee gradle-build.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if [ "$STATUS" -ne 0 ]; then
+            {
+              echo '## Gradle build failed'
+              echo '```'
+              tail -n 250 gradle-build.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit "$STATUS"
+          fi
           mkdir -p dist
           cp smarttubetv/build/outputs/renamed_apks/stmobileRelease/SyTube_*.apk dist/
           ls -l dist
