@@ -498,4 +498,25 @@
     <string name="mobile_nav_shorts">Shorts</string>
     <string name="mobile_nav_create">Create</string>
     <string name="mobile_create_not_supported">Uploading and creation are not available in SyTube</string>
+
+    <!-- SyTube Music -->
+    <string name="mobile_music_title">Music</string>
+    <string name="mobile_music_subtitle">Liked songs, mixes and playlists picked for you</string>
+    <string name="mobile_music_greeting_morning">Good morning</string>
+    <string name="mobile_music_greeting_afternoon">Good afternoon</string>
+    <string name="mobile_music_greeting_evening">Good evening</string>
+    <string name="mobile_music_greeting_night">Good night</string>
+    <string name="mobile_music_playlist">Playlist</string>
+    <string name="mobile_music_artist">Artist</string>
+    <string name="mobile_music_play">Play</string>
+    <string name="mobile_music_play_pause">Play or pause</string>
+    <string name="mobile_music_close">Close player</string>
+    <string name="mobile_music_sign_in_title">Sign in to listen</string>
+    <string name="mobile_music_sign_in_message">Sign in to see your liked songs, personalised mixes and playlists.</string>
+    <string name="mobile_music_sign_in_button">Sign in</string>
+    <string name="mobile_music_empty_title">No music yet</string>
+    <string name="mobile_music_empty_message">Like a few songs on YouTube Music or listen to some music, then come back here.</string>
+    <string name="mobile_music_error_title">Couldn\'t load music</string>
+    <string name="mobile_music_error_message">Check your connection and try again.</string>
+    <string name="mobile_music_retry">Try again</string>
 </resources>

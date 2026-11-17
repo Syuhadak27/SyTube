@@ -229,6 +229,17 @@
             android:screenOrientation="unspecified"
             android:theme="@style/Theme.NewTube" />
 
+        <!-- SyTube Music home (music tab / top-bar note / You row). Same shared-task and
+             configChanges pattern as the other touch screens: rotation keeps the loaded shelves
+             and the in-flight music request. -->
+        <activity
+            android:name="com.newtube.mobile.ui.music.MobileMusicActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection|keyboardHidden|uiMode"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.NewTube" />
+
         <!--
           Touch Search screen (Wave 4b). Same singleInstance + configChanges pattern as the
           other touch Activities (ViewManager.startActivity() launches with FLAG_ACTIVITY_NEW_TASK;

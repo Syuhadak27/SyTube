@@ -143,14 +143,14 @@ public class MobileBrowseActivity extends MobileActivity
      */
     private static final int[] PREFERRED_SECTION_IDS = {
             MediaGroup.TYPE_HOME,
+            MediaGroup.TYPE_MUSIC,
             MediaGroup.TYPE_SUBSCRIPTIONS,
-            MediaGroup.TYPE_HISTORY,
             VideoDownloads.SECTION_ID,
     };
     private static final int[] PREFERRED_SECTION_TITLE_RES = {
             R.string.header_home,
+            R.string.header_music,
             R.string.header_subscriptions,
-            R.string.header_history,
             R.string.header_downloads,
     };
 
@@ -188,6 +188,9 @@ public class MobileBrowseActivity extends MobileActivity
     private MaterialButton mErrorAction;
     private ImageButton mSearchButton;
     private ImageButton mCastButton;
+    private ImageButton mMusicButton;
+    /** A music visit is in flight: restore the tab/chip that was current when it returns. */
+    private boolean mReturningFromMusic;
     /** Process-wide cast session singleton; Browse only reads state + opens the picker. */
     private CastSessionManager mCastSessionManager;
 
@@ -268,6 +271,7 @@ public class MobileBrowseActivity extends MobileActivity
         setupErrorAction();
         setupSearchButton();
         setupCastButton();
+        setupMusicButton();
 
         AppearancePrefs.addListener(mAppearanceListener);
         applyNavigationMode(false);
@@ -318,6 +322,7 @@ public class MobileBrowseActivity extends MobileActivity
         mErrorAction = findViewById(R.id.mobile_error_action);
         mSearchButton = findViewById(R.id.mobile_search_button);
         mCastButton = findViewById(R.id.mobile_cast_button);
+        mMusicButton = findViewById(R.id.mobile_music_button);
         mHeaderContainer = findViewById(R.id.mobile_header_container);
         mCategoryScroll = findViewById(R.id.mobile_category_scroll);
         mCategoryBar = new CategoryChipBar(this, this::onCategoryChipChosen);
@@ -842,6 +847,24 @@ public class MobileBrowseActivity extends MobileActivity
     private void setupSearchButton() {
         mSearchButton.setOnClickListener(v -> SearchPresenter.instance(this).startSearch(null));
         com.newtube.mobile.ui.common.GlassMaterial.applyTouchScaleFeedback(mSearchButton);
+    }
+
+    // ---------------------------------------------------------------------------------
+    // SyTube Music entry points: top-bar note, the bottom-nav Music tab, the Music chip
+    // on Home and the Music row in the You panel all land on MobileMusicActivity.
+    // ---------------------------------------------------------------------------------
+
+    private void setupMusicButton() {
+        mMusicButton.setOnClickListener(v -> openMusicScreen());
+        com.newtube.mobile.ui.common.GlassMaterial.applyTouchScaleFeedback(mMusicButton);
+    }
+
+    private void openMusicScreen() {
+        mReturningFromMusic = true;
+        // The You panel can be the entry point; close it so it is not still open behind Music.
+        hideYouPanel();
+        com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager
+                .instance(this).startView(com.newtube.mobile.ui.music.MobileMusicActivity.class);
     }
 
     // ---------------------------------------------------------------------------------
@@ -1388,6 +1411,16 @@ public class MobileBrowseActivity extends MobileActivity
 
     private void addYouSectionRow(BrowseSection section) {
         int sectionId = section.getId();
+        if (sectionId == MediaGroup.TYPE_MUSIC) {
+            View row = addYouRow(R.drawable.ic_mobile_music, section.getTitle(), this::openMusicScreen);
+            row.setOnLongClickListener(v -> {
+                if (mPresenter != null) {
+                    mPresenter.onSectionLongPressed(sectionId);
+                }
+                return true;
+            });
+            return;
+        }
         View row = addYouRow(section.getResId(), section.getTitle(), () -> {
             mSectionFromYou = true;
             hideYouPanel();
@@ -1541,6 +1574,11 @@ public class MobileBrowseActivity extends MobileActivity
      * {@link BrowsePresenter#onSectionFocused} path and keeps both nav surfaces in sync.
      */
     private void onSectionChosen(int sectionId) {
+        // Music is its own screen (square-artwork shelves), not the generic video grid.
+        if (sectionId == MediaGroup.TYPE_MUSIC) {
+            openMusicScreen();
+            return;
+        }
         // The Settings section has no video-grid renderer on the mobile shell (its content
         // arrives as a SettingsGroup, which updateSection(SettingsGroup) intentionally
         // ignores). Route it to the working AppDialog settings screen instead of a blank grid.
@@ -2041,6 +2079,8 @@ public class MobileBrowseActivity extends MobileActivity
                 return R.drawable.ic_nav_subscriptions;
             case MediaGroup.TYPE_HISTORY:
                 return R.drawable.ic_nav_history;
+            case MediaGroup.TYPE_MUSIC:
+                return R.drawable.ic_nav_music;
             case VideoDownloads.SECTION_ID:
                 return R.drawable.ic_nav_downloads;
             default:
@@ -2136,6 +2176,14 @@ public class MobileBrowseActivity extends MobileActivity
         // callbacks can arrive while DisplayMetrics still describe the player window, so always
         // reconcile the retained GridLayoutManager against Home's current configuration on resume.
         updateGridSpanCount(computeSpanCount());
+
+        // A music visit selected the Music tab/chip; put the highlight back on the section that
+        // is actually behind this screen (the grid never switched away).
+        if (mReturningFromMusic) {
+            mReturningFromMusic = false;
+            syncNavHighlight(mCurrentSectionId);
+            updateCategoryBarVisibility();
+        }
     }
 
     /**

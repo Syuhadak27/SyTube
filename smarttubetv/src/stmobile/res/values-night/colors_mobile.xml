@@ -51,4 +51,8 @@
     <!-- Apple navigation bar colors: vibrant red active icon filling -->
     <color name="mobile_floating_nav_active">#FF0033</color>
     <color name="mobile_floating_nav_inactive">#8E8E93</color>
+
+    <!-- Music home hero wash (dark theme). -->
+    <color name="mobile_music_hero_start">#4DFF0033</color>
+    <color name="mobile_music_hero_end">#00FF0033</color>
 </resources>
