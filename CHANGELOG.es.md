@@ -1,5 +1,14 @@
 # SyTube — Novedades
 
+## 1.21.0 — 2026-11-17
+
+### Cambios
+
+- Nuevo inicio de SyTube Music con estanterías, saludo y reproductor inferior.
+- Accesos a Music en la barra inferior, barra superior, Inicio y panel Tú.
+- App dev separada (`com.sytube.dev`) con su propio canal de actualización.
+- Identidad de compilación centralizada en `sytube.properties`.
+
 ## 1.19.3 — 2026-11-16
 
 ### Cambios

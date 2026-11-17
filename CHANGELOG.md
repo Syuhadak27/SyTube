@@ -1,5 +1,17 @@
 # SyTube Changelog
 
+## 1.21.0 — 2026-11-17
+
+### Added
+
+- SyTube Music home with square-artwork shelves, a time-of-day greeting and a docked now-playing strip.
+- Music shortcuts in the bottom navigation, top bar, Home category chips and the You panel.
+- Separate dev app identity (`com.sytube.dev`) with its own rolling dev update channel.
+
+### Changed
+
+- App identity (package, label, versionCode and versionName) now lives in the root `sytube.properties`.
+
 ## 1.20.0 — 2026-11-16
 
 ### Changed
