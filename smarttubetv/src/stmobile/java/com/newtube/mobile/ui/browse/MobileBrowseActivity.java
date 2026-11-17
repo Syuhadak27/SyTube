@@ -861,6 +861,8 @@ public class MobileBrowseActivity extends MobileActivity
 
     private void openMusicScreen() {
         mReturningFromMusic = true;
+        // The You panel can be the entry point; close it so it is not still open behind Music.
+        hideYouPanel();
         com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager
                 .instance(this).startView(com.newtube.mobile.ui.music.MobileMusicActivity.class);
     }

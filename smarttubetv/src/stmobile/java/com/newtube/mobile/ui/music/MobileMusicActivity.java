@@ -290,6 +290,8 @@ public class MobileMusicActivity extends MobileActivity implements MiniPlayerBri
         mSwipe.setRefreshing(false);
         if (mLoaded || !mShelfViews.isEmpty()) {
             hideState();
+            // The feed may finish loading after a song was opened elsewhere; dock the strip now.
+            updateNowPlaying();
         } else {
             showEmpty();
         }
